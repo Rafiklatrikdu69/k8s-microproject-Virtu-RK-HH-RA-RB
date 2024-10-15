@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: k8s-microproject
+  labels:
+    app: k8s-microproject
+spec:
+  replicas: 3  
+  selector:
+    matchLabels:
+      app: k8s-microproject
+  template:
+    metadata:
+      labels:
+        app: k8s-microproject
+    spec:
+      containers:
+        - name: k8s-microproject
+          image: rafik1212/k8s-microproject:latest
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+          ports:
+            - containerPort: 3000

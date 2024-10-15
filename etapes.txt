@@ -1,0 +1,7 @@
+curl.exe --resolve "app-express.local:443:127.0.0.1" -i https://app-express.local/
+kubectl create secret tls self-signed-tls --key private.key --cert certificate.crt
+
+http:
+curl.exe --resolve "app-express.local:80:127.0.0.1" -i http://app-express.local/
+
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout private.key -out certificate.crt -subj "/CN=leliendusite"
