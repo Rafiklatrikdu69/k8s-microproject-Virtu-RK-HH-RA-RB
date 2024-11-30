@@ -3,20 +3,26 @@ kind: Ingress
 metadata:
   name: nodejs-ingress
   annotations:
+    kubernetes.io/ingress.class: nginx
     nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: "50m"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "600"
 spec:
   tls:
     - hosts:
-      - app-express.local
-      secretName: self-signed-tls
+      -  microproject.com
+      secretName: k8-tls
   rules:
-    - host: app-express.local
+    - host:  microproject.com
       http:
         paths:
           - path: /
             pathType: Prefix
             backend:
               service:
-                name: k8s-microproject-service 
+                name: srv-nodeport
                 port:
                   number: 3000

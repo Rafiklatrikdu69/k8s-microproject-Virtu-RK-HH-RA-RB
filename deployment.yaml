@@ -1,25 +1,42 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: k8s-microproject
+  name: k8-micro-project
   labels:
-    app: k8s-microproject
+    app: node-svr
 spec:
-  replicas: 3  
+  replicas: 1
   selector:
     matchLabels:
-      app: k8s-microproject
+      app: node-svr
   template:
     metadata:
       labels:
-        app: k8s-microproject
-    spec:
+        app: node-svr
+    spec: 
       containers:
-        - name: k8s-microproject
-          image: rafik1212/k8s-microproject:latest
-          resources:
-            limits:
-              memory: "128Mi"
-              cpu: "500m"
-          ports:
-            - containerPort: 3000
+      - name: app-ctr
+        image: rafik1212/k8s-microproject:latest
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 3000
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 3000
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        imagePullPolicy: Always
+        envFrom:
+        - configMapRef:
+            name: k8-map
+        volumeMounts:
+        - name: k8s-node-persistent-storage
+          mountPath: /mnt/app
+      volumes:
+      - name: k8s-node-persistent-storage
+        persistentVolumeClaim:
+          claimName: k8-pvc
