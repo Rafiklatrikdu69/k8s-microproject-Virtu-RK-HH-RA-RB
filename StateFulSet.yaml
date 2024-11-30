@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: my-statefulset
+spec:
+  serviceName: "srv-nodeport"
+  replicas: 3
+  selector:
+    matchLabels:
+      app: node-svr
+  template:
+    metadata:
+      labels:
+        app: node-svr
+    spec:
+      containers:
+        - name: app-ctr
+          image: rafik1212/k8s-microproject:latest
+          volumeMounts:
+            - name: k8s-node-persistent-storage
+              mountPath: /data
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 3000
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 3000
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          imagePullPolicy: Always
+          env:
+          - name: USER_NAME
+            valueFrom:
+              configMapKeyRef:
+                name: k8-map
+                key: USER_NAME
+      volumes:
+        - name: k8s-node-persistent-storage
+          persistentVolumeClaim:
+            claimName: k8-pvc
+  volumeClaimTemplates:
+    - metadata:
+        name: k8-pvc
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 1Gi
