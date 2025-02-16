@@ -2,12 +2,11 @@ apiVersion: v1
 kind: PersistentVolume
 metadata:
   name: pv-data
-  namespace: k8-virtu
   labels:
     type: local
     app: app
 spec:
-  persistentVolumeReclaimPolicy: Retain  # Changez Retain à Delete
+  persistentVolumeReclaimPolicy: Retain
   storageClassName: standard
   capacity:
     storage: 2Gi

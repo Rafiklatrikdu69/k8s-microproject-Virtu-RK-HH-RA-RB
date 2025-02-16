@@ -1,5 +1,5 @@
 ## Steps
-
+#### Les résultats des commandes effectuer sont dans le dossier resultat-commandes.
 ### Step 1 - Initial project setup
 
 1. Clone this repository
@@ -137,9 +137,34 @@ kubectl apply -f ingress.yaml
 ```bash
 kubectl get ingress
 ```
+### Pour HTTPS : 
+```Generation de la clé :```
+
+```bash
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout private.key -out certificate.crt -subj "/CN=microproject.com"
+
+```
 
 4. Send a GET request to the ingress
 
 ```bash
-curl --resolve "<ingress-host>:80:<ingress-address>" -i http://<ingress-host>/
+curl.exe --insecure --resolve "microproject.com:443:127.0.0.1" -i https://microproject.com/
+
+```
+5. Config map
+
+```bash
+kubectl apply -f configMap.yaml
+```
+
+6. Persistent Volume
+
+```bash
+kubectl apply -f persistentVolume.yaml
+```
+
+7. PVC
+
+```bash
+kubectl apply -f pvc.yaml
 ```

@@ -4,9 +4,9 @@ metadata:
   name: k8-pvc
 spec:
   accessModes:
-    - ReadWriteMany  
+    - ReadWriteMany
   resources:
     requests:
       storage: 2Gi
-  storageClassName: standard  
+  storageClassName: standard
   volumeName: pv-data
